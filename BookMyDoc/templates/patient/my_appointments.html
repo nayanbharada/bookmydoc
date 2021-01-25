@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}my appointments page{% endblock title %}
+{% block content %}
+{% include 'partials/messages.html' %}
+<div class="container">
+    <div class="page-header">
+        <center><h2>
+            Booked Appointments
+        </h2></center>
+    </div>
+<br>
+
+<table border="1" id="example" class="responstable" style="width:100%">
+    <thead>
+    <tr>
+<!--        <th>ID</th>-->
+        <th>Name</th>
+        <th>Hospital Name</th>
+        <th>Doctor Name</th>
+        <th>Booked Date</th>
+        <th>Booked Slot</th>
+        <th>status</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+{% for appointment in my_appointments %}
+    <tr>
+<!--        <td>{{appointment.id}}</td>-->
+        <td>{{appointment.patient.user.first_name}} {{appointment.patient.user.last_name}}</td>
+        <td>{{appointment.hospital.name}}</td>
+        <td>{{appointment.doctor.user.first_name}} {{appointment.doctor.user.last_name}}</td>
+        <td>{{appointment.date|date:"D, d M, Y" }}</td>
+        <td>{{appointment.time_slot.from_time|time:"h:i a"}} to {{appointment.time_slot.to_time|time:"h:i a"}}</td>
+        <td>{{appointment.status}}</td>
+
+        <td>
+            {% if appointment.status == 'Booked' %}
+            <form method="post" class="cancel-booking" action="{% url 'patient:cancel_appointments' appointment.id %}"
+                  id="cancel-booking">
+                {% csrf_token %}
+                <button class="btn btn-danger">Cancel</button>
+            </form>
+            {% else %}
+            {% endif %}
+        </td>
+
+    </tr>
+{% endfor %}
+    </tbody>
+</table>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+$(document).ready(function() {
+    $('#example').DataTable({
+        "paging":   true,
+        "ordering": false,
+        "info":     false,
+        "dom": "ftipr"
+    });
+
+$('.cancel-booking').on('submit', function(event){
+
+              var r = confirm("Are You Sure!");
+              if (r == true) {
+
+              }
+              else
+              {
+                 event.preventDefault();
+               }
+});
+});
+</script>
+
+
+{% endblock %}

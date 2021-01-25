@@ -1,0 +1,59 @@
+{% load crispy_forms_tags %}
+{% include 'partials/messages.html' %}
+
+<form method="post" action="{% url 'hospital:appointment_book'%}" id="patient-form">
+        {% csrf_token %}
+    <div class="row">
+        <div class="col-md-6" style="color: black;">
+            <div class="error-msg" style="display: None;"></div>
+            {{ form|crispy }}
+            <input type="hidden" name="selected_date" id="selected_date" value="{{ request.POST.select_date}}">
+            <input type="hidden" name="selected_slot" id="selected_slot" required="">
+        </div>
+        <div class="col-md-6">
+            {% for i in doc_time_slot %}
+            <label class="btn btn-custom" id="{{i.id}}">{{ i.from_time|time:"h:i a" }}</label>
+
+            {% endfor %}
+                <br><br><br>
+            <input type="submit" style="display: None;" class="btn btn-primary" value="Book Appointment">
+        </div>
+
+    </div>
+</form>
+<script type="text/javascript">
+function changeElement(id) {
+  var el = document.getElementById(id);
+    $('.btn-custom').css({display: "none"});
+    $('.btn-primary').css({display: "block",backgroundColor: "#20c997", color: "black",borderColor: "black"});
+    el.style.display= "block";
+    el.style.backgroundColor = "#414146";
+}
+$(document).ready(function() {
+    $('#patient-form').on('submit', function(event){
+        var phone = document.getElementById("mobile_no").value;
+            var IndNum = /^\d{10}$/;
+              if(IndNum.test(phone))
+              {
+                return true;
+              }
+              else
+              {
+                $('.error-msg').show();
+                   data = '<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>mobile no must be indian & 10 digits</div>';
+                    $('.error-msg').html(data);
+                    event.preventDefault();
+
+                    return false;
+              }
+
+});
+
+    $(".btn-custom").click(function() {
+    var slot_id = $(this).attr('id');
+             $('#selected_slot').val(slot_id);
+             changeElement(slot_id);
+             console.log(slot_id);
+    });
+});
+</script>

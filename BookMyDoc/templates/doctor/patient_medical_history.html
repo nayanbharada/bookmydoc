@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% block title %}Patient Medical History Page{% endblock %}
+{% block content %}
+<br><br>
+<div class="container">
+
+    <div class="card text-center">
+        <div class="card-header" style="background-color: #20c997; color: black;">
+            <h3>Patient Detail</h3>
+        </div>
+        <div class="card-body">
+            <div class="row" >
+                <div class="col-md-4" style="color: black;">
+                    <h4 class="card-title" style="color: black;">Basic detail</h4>
+
+                    <p class="card-text" style="color: black;">
+                        {% if appointment_obj.patient.user.first_name %}
+                        Patient name:- {{appointment_obj.patient.user.first_name}}
+                        {{appointment_obj.patient.user.last_name}}
+                        {% else %}
+                        Patient name:- {{appointment_obj.patient.first_name}} {{appointment_obj.patient.last_name}}
+                        {% endif %}
+                    </p>
+
+                    <p class="card-text" style="color: black;">
+                        {% if appointment_obj.patient.user.email %}
+                        Patient email:- {{appointment_obj.patient.user.email}}
+                        {% else %}
+                        Patient email:- {{appointment_obj.patient.email}}
+                        {% endif %}
+                    </p>
+                    <p class="card-text" style="color: black;">
+                        {% if appointment_obj.patient.user.gender %}
+                        Patient gender:- {{appointment_obj.patient.user.gender}}
+                        {% else %}
+                        Patient gender:- {{appointment_obj.patient.gender}}
+                        {% endif %}
+                    </p>
+
+                    <p class="card-text" style="color: black;">
+                        {% if appointment_obj.patient.user.mobile_number %}
+                        Patient mobile_no:- {{appointment_obj.patient.user.mobile_number}}
+                        {% else %}
+                        Patient mobile_no:- {{appointment_obj.patient.mobile_no}}
+                        {% endif %}
+                    </p>
+                </div>
+
+                <div class="col-md-4">
+                    {% if appointment_obj.patient.user.first_name %}
+                    <h4 class="card-title" style="color: black;">Medical history</h4>
+
+                    <p class="card-text" style="color: black;">
+                        {% if appointment_obj.patient.birth_date %}
+                        Patient birth_date:- {{appointment_obj.patient.birth_date}}
+                        {% else %}
+                        {% endif %}
+                    </p>
+                    <p class="card-text" style="color: black;">
+                        {% if appointment_obj.patient.weight %}
+                        Patient weight:- {{appointment_obj.patient.weight}}
+                        {% else %}
+                        {% endif %}
+                    </p>
+                    <p class="card-text" style="color: black;">
+                        {% if appointment_obj.patient.height %}
+                        Patient height:- {{appointment_obj.patient.height}}
+                        {% else %}
+                        {% endif %}
+                    </p>
+                    <p class="card-text" style="color: black;">
+                        {% if appointment_obj.patient.blood_group %}
+                        Patient blood_group:- {{appointment_obj.patient.blood_group}}
+                        {% else %}
+                        {% endif %}
+                    </p>
+                    <p class="card-text" style="color: black;">
+                        {% if appointment_obj.patient.pulse %}
+                        Patient pulse:- {{appointment_obj.patient.pulse}}
+                        {% else %}
+                        {% endif %}
+                    </p>
+                    <p class="card-text" style="color: black;">
+                        {% if appointment_obj.patient.blood_pressure %}
+                        Patient blood_pressure:- {{appointment_obj.patient.blood_pressure}}
+                        {% else %}
+                        {% endif %}
+                    </p>
+                    {% else %}
+
+                    <!--                        Patient name:- {{appointment_obj.patient.first_name}} {{appointment_obj.patient.last_name}}-->
+                    {% endif %}
+                </div>
+                <div class="col-md-4">
+                    <br>
+                    {% if appointment_obj.patient.user.first_name %}
+                    <p class="card-text" style="color: black;">
+                        {% if appointment_obj.patient.physical_disorders %}
+                        Patient physical_disorders:- {{appointment_obj.patient.physical_disorders}}
+                        {% else %}
+                        {% endif %}
+                    </p>
+                    <p class="card-text" style="color: black;">
+                        {% if appointment_obj.patient.major_surgeries %}
+                        Patient major_surgeries:- {{appointment_obj.patient.major_surgeries}}
+                        {% else %}
+                        {% endif %}
+                    </p>
+                    <p class="card-text" style="color: black;">
+                        {% if appointment_obj.patient.mental_disorders %}
+                        Patient mental_disorders:- {{appointment_obj.patient.mental_disorders}}
+                        {% else %}
+                        {% endif %}
+                    </p>
+                    <p class="card-text" style="color: black;">
+                        {% if appointment_obj.patient.diabetes %}
+                        Patient diabetes:- {{appointment_obj.patient.diabetes}}
+                        {% else %}
+                        {% endif %}
+                    </p>
+                    <p class="card-text" style="color: black;">
+                        {% if appointment_obj.patient.cancer %}
+                        Patient cancer:- {{appointment_obj.patient.cancer}}
+                        {% else %}
+                        {% endif %}
+                    </p>
+                    <p class="card-text" style="color: black;">
+                        {% if appointment_obj.patient.heart_attack %}
+                        Patient heart_attack:- {{appointment_obj.patient.heart_attack}}
+                        {% else %}
+                        {% endif %}
+                    </p>
+                    <p class="card-text" style="color: black;">
+                        {% if appointment_obj.patient.smoke %}
+                        Patient smoke:- {{appointment_obj.patient.smoke}}
+                        {% else %}
+                        {% endif %}
+                    </p>
+                    <p class="card-text" style="color: black;">
+                        {% if appointment_obj.patient.regular_medicine %}
+                        Patient regular_medicine:- {{appointment_obj.patient.regular_medicine}}
+                        {% else %}
+                        {% endif %}
+                    </p>
+                    <p class="card-text" style="color: black;">
+                        {% if appointment_obj.patient.drug_allergies %}
+                        Patient drug_allergies:- {{appointment_obj.patient.drug_allergies}}
+                        {% else %}
+                        {% endif %}
+                    </p>
+                    <p class="card-text" style="color: black;">
+                        {% if appointment_obj.patient.comments %}
+                        Patient comments:- {{appointment_obj.patient.comments}}
+                        {% else %}
+                        {% endif %}
+                    </p>
+                    {% else %}
+
+                    <!--                        Patient name:- {{appointment_obj.patient.first_name}} {{appointment_obj.patient.last_name}}-->
+                    {% endif %}
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+</div>
+
+
+{% endblock %}

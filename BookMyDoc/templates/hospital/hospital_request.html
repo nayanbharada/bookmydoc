@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Hospital Request Page{% endblock %}
+{% block content %}
+<div id="hospital_request" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                 <h4 class="modal-title">Hospital Request</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <input type="submit" class="btn btn-success" value="submit">
+                    <input type="reset" class="btn btn-primary" value="reset">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#hospital_request').modal('show');
+    $('#hospital_request').on('hidden.bs.modal', function () {
+      var url = "{% url 'user:index' %}";
+      document.location.href = url;
+});
+});
+
+</script>
+{% endblock %}

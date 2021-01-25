@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}All hospital images page{% endblock %}
+{% block content %}
+{% include 'partials/messages.html' %}
+<div class="container">
+    <div class="page-header">
+        <center><h2>
+            Hospital images
+        </h2></center>
+    </div>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <table class="responstable">
+                <tr>
+                    <th>Hospital name</th>
+                    <th>Image</th>
+                    <th>Action</th>
+                </tr>
+                {% for hospital_image in hospital_images %}
+                <tr>
+                    <td>{{hospital_image.hospital.name}}</td>
+                    <td><img src="{{hospital_image.image.url}}" class="img-thumbnail"></td>
+                    <td><a href="{% url 'hospital:hospital_delete_image' hospital_image.id %}" class="btn btn-danger">Delete</a></td>
+                </tr>
+
+                {% endfor %}
+
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block js %}
+<script>
+$(document).ready(function (){
+    $('.btn-danger').click(function (e) {
+        var r = confirm("Are you sure!");
+              if (r == true) {
+
+              }
+              else
+              {
+                e.preventDefault();
+              }
+
+    });
+
+});
+
+</script>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Medical History Page{% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% include 'partials/messages.html' %}
+
+<div class="container">
+    <div class="page-header">
+        <center><h2>
+            Medical History
+        </h2></center>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <form method="post">
+                {% csrf_token %}
+                {{form|crispy}}
+                <input type="submit" value="submit" class="btn btn-primary">
+                <input type="reset" value="clear" class="btn btn-success">
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block js %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+
+<script>
+$(document).ready(function () {
+     var dateToday = new Date();
+    $('#id_birth_date').datepicker({
+       "dateFormat": "yy-mm-dd",
+       maxDate: dateToday
+
+    });
+});
+</script>
+{% endblock %}

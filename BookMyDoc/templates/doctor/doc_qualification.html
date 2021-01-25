@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Doctor Qualification Page{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% include 'partials/messages.html' %}
+<div class="container">
+    <div class="page-header">
+        <center><h2>
+            Doctor Qualification
+        </h2></center>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <form method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <input type="submit" class="btn btn-primary" value="submit">
+                <input type="reset" class="btn btn-success" value="clear">
+            </form>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <table class="responstable">
+            <tr>
+                <th>Dr Name</th>
+                <th>Degree</th>
+                <th>Collage name</th>
+                <th>Year Completion</th>
+                <th>Action</th>
+                <th>Action</th>
+            </tr>
+            {% for doctor_qualification in doctor_qualifications %}
+            <tr>
+                <td>{{doctor_qualification.doctor_profile.user.first_name}}</td>
+                <td>{{doctor_qualification.degree}}</td>
+                <td>{{doctor_qualification.university}}</td>
+                <td>{{doctor_qualification.year_completion}}</td>
+                <td><a href="{% url 'doctor:delete_doc_qualification' doctor_qualification.id %}" class="btn btn-danger">delete</a></td>
+                <td><a href="{% url 'doctor:edit_doc_qualification' doctor_qualification.id %}" class="btn btn-primary">edit</a></td>
+
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+$(document).ready(function() {
+    $('.btn-danger').click(function() {
+            var r = confirm("Are You Sure!");
+              if (r == true){
+
+              }
+              else
+              {
+                event.preventDefault();
+              }
+
+    });
+
+});
+
+</script>
+{% endblock %}

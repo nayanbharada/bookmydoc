@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% block title %}Doctor Dashboard Page{% endblock %}
+{% block content %}
+{% include 'partials/messages.html' %}
+<div class="container">
+    <div class="page-header">
+        <center><h2>
+            Dashboard
+        </h2></center>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <a href="{% url 'doctor:today_appointments' %}">
+                <div class="card text-white mb-3" style="max-width: 16rem; background: #28a745eb;">
+                    <!--  <div class="card-header">Appointments</div>-->
+                    <div class="card-body">
+                        <h4 class="card-title">Today Appointments</h4>
+                        <div class="rotate">
+                            <i class="fa fa-address-book-o fa-3x"></i>
+                            <div align="right"><span class="badge badge-danger ml-3"
+                                                     style="font-size: 17px;">{{today_appointments.count}}</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'doctor:all_appointments' %}">
+                <div class="card text-white mb-3" style="max-width: 16rem; background: #17a2b8;">
+                    <!--  <div class="card-header">Appointments</div>-->
+                    <div class="card-body">
+                        <h4 class="card-title">All Appointments</h4>
+                        <div class="rotate">
+                            <i class="fa fa-list-alt fa-3x"></i>
+                            <div align="right">
+                                <span class="badge badge-danger ml-3" style="font-size: 17px;">{{appointment_list.count}}</span>
+                            </div>
+                        </div>
+
+                        <p class="card-text-right"></p>
+                    </div>
+                </div>
+            </a>
+        </div>
+<!--        <div class="col-md-4">-->
+<!--            <a href="{% url 'doctor:other_appointments' %}">-->
+<!--                <div class="card text-white mb-3" style="max-width: 16rem; background: #ff8d00d6;">-->
+<!--                    &lt;!&ndash;  <div class="card-header">Appointments</div>&ndash;&gt;-->
+<!--                    <div class="card-body">-->
+<!--                        <h4 class="card-title">Other Appointments</h4>-->
+<!--                        <div class="rotate">-->
+<!--                            <i class="fa fa-th-list fa-3x"></i>-->
+<!--                            <div align="right">-->
+<!--                                <span class="badge badge-danger ml-3" style="font-size: 17px;">{{other_appointment_list.count}}</span>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+<!--                        <p class="card-text-right"></p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </a>-->
+<!--        </div>-->
+        <div class="col-md-4">
+            <a href="{% url 'doctor:doc_profile' request.user.id %}">
+                <div class="card text-white mb-3" style="max-width: 16rem; background: #f99;">
+                    <!--  <div class="card-header">Appointments</div>-->
+                    <div class="card-body">
+                        <h4 class="card-title">User Profile</h4>
+                        <div class="rotate">
+                            <i class="fa fa-user fa-3x"></i>
+                        </div>
+
+                        <p class="card-text-right"></p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'doctor:doc_qualification' %}">
+                <div class="card text-white mb-3" style="max-width: 16rem; background: #ff5e00;">
+                    <!--  <div class="card-header">Appointments</div>-->
+                    <div class="card-body">
+                        <h4 class="card-title">Qualification</h4>
+                        <div class="rotate">
+                            <i class="fa fa-graduation-cap fa-3x"></i>
+                        </div>
+
+                        <p class="card-text-right"></p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'doctor:doc_time_slot' %}">
+                <div class="card text-white mb-3" style="max-width: 16rem; background: #ff2489e0;">
+                    <!--  <div class="card-header">Appointments</div>-->
+                    <div class="card-body">
+                        <h4 class="card-title">Add Timeslot</h4>
+                        <div class="rotate">
+                            <i class="fa fa-clock-o fa-3x"></i>
+                        </div>
+
+                        <p class="card-text-right"></p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'doctor:all_hospital' %}">
+                <div class="card text-white mb-3" style="max-width: 16rem; background: #007bff;">
+                    <!--  <div class="card-header">Appointments</div>-->
+                    <div class="card-body">
+                        <h4 class="card-title">All Hospital</h4>
+                        <div class="rotate">
+                            <i class="fa fa-hospital-o fa-3x"></i>
+                        </div>
+
+                        <p class="card-text-right"></p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+    </div>
+
+
+</div>
+
+{% endblock %}

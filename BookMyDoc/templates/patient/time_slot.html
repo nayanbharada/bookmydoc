@@ -1,0 +1,38 @@
+{% include 'partials/messages.html' %}
+<form method="post" action="{% url 'patient:time_slot' %}">
+    {% csrf_token %}
+<div class="row">
+    <div class="col-md-12">
+        {% for j in doc_time_slot %}
+<label class="btn btn-custom" id="{{j.id}}">{{ j.from_time|time:"h:i a" }}</label>
+
+{% endfor %}
+
+ <input type="hidden" name="selected_date" id="selected_date" value="{{ request.POST.the_post}}">
+        <input type="hidden" name="selected_slot" id="selected_slot" required="">
+
+<input type="submit" style="display: None;" class="btn btn-primary" value="Book Appointment">
+
+
+    </div>
+</div>
+</form>
+
+
+<script type="text/javascript">
+function changeElement(id) {
+  var el = document.getElementById(id);
+    $('.btn-custom').css({display: "none"});
+    $('.btn-primary').css({display: "block",backgroundColor: "#20c997", color: "black",borderColor: "black"});
+    el.style.display= "block";
+    el.style.backgroundColor = "#414146";
+}
+$(document).ready(function() {
+    $(".btn-custom").click(function() {
+    var slot_id = $(this).attr('id');
+             $('#selected_slot').val(slot_id);
+             changeElement(slot_id);
+             console.log(slot_id);
+    });
+   });
+</script>

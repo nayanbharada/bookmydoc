@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %} Hospital Profile Page {% endblock title %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <center><h2>
+            Hospital Profile
+        </h2></center>
+    </div>
+    <div class="row" style="color: black;">
+        <div class="col-md-8">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ user_form|crispy }}
+
+                {{ form|crispy }}
+                <input type="submit" value="submit" class="btn btn-primary">
+                <input type="reset" value="clear" class="btn btn-success">
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

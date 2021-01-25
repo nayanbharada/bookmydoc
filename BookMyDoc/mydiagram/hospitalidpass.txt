@@ -1,0 +1,108 @@
+apple =qNPFPGyh4q clinic
+shalby=	J5RXKGSyMy hospital
+tapan = wAdjg7XNzc hospital
+
+shalin F4gqtgY5XU doctor apple
+sagar Sagarmakwana@123 doctor shalby
+udit QdfaWKtZhp doctor shalby
+akki QxqefQFtja doctor shalby
+
+raja 35AtdWvXjA doctor tapan
+
+
+manish ExL8tAvxHn doctor xyz
+
+
+href="{% url 'doctor:appointment_book' i.id %}?selected_date={{ request.POST.select_date}}" 
+
+// $(this) refers to button that was clicked
+
+function phonenumber(inputtxt)
+{
+  var phoneno = /^\d{10}$/;
+  if((inputtxt.value.match(phoneno))
+        {
+      return true;
+        }
+      else
+        {
+        alert("message");
+        return false;
+        }
+}
+
+#168db3
+
+$('#image_modal .modal-dialog').html($('#image_modal .modal-dialog',response));
+                 $('#image_modal').modal('show');
+                console.log("modal");
+                $('#image_modal').modal('show');
+
+
+|slice:":4"
+
+
+  .dataTables_wrapper .myfilter .dataTables_filter{float:left;  width:300px;}
+.dataTables_wrapper .mylength .dataTables_length{float:right}
+
+docbookmy@gmail.com
+
+
+appointment.update(status=Appointment.Cancel)
+superusers = User.objects.filter(is_superuser=True)
+
+href="{% url 'user:register' %}"
+href="{% url 'user:login' %}"
+
+{% static 'images/index_hero.jpg' %}
+
+
+<h5>
+                                        {% for i in all_hospital_clinic.hospital.all reversed %}
+
+                                        {% if forloop.counter > 4 %}
+                                        {{ endfor }}
+                                        {% else %}
+                                        <a data-toggle="modal"
+                                           data-target="#myModal{{i.pk}}{{ forloop.counter0}}">
+                                            <img src="{{ i.image.url }}" alt=""
+                                                 style="width:15%; border-radius: 5px; cursor: pointer; transition: 0.3s;"/></a>
+
+                                        {% endif %}
+
+
+                                        {% endfor %}
+
+                                    </h5>
+
+
+ {% for image in all_hospital_clinic.hospital.all reversed %}
+                                    <div id="myModal{{ image.pk }}{{forloop.counter0}}" class="modal fade"
+                                         role="dialog">
+                                        <div class="modal-dialog" style="text-align:center;">
+                                            <div class="modal-content"
+                                                 style="display:inline-block; margin: auto; display: block; width: 80%; max-width: 700px;">
+                                                <img src="{{ image.image.url }}" alt=""/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+
+
+
+
+
+
+       <div class="text-right">
+                                <div class="card-footer">
+                                    <a href="{% url 'patient:booking' %}" class="btn btn-sm"
+                                       style="background-color: #20c997; color: black; border-color: black;">Book Appointment</a>
+                                </div>
+                            </div>
+
+
+style="display:inline-block; margin: auto; display: block; width: 80%; max-width: 700px;"
+
+
+
+

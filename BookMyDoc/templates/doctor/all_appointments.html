@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% block title %}Doctor All Appointments Page{% endblock %}
+{% block content %}
+{% include 'partials/messages.html' %}
+<div class="container">
+    <div class="page-header">
+        <center><h2>
+            All Appointment List
+        </h2></center>
+    </div>
+<form method="get" action="{% url 'doctor:status_filter' %}">
+    <select type="select" style="width: 30%;" name="status_filter" class="form-control" onchange="this.form.submit()">
+        <option>--Search By Status--</option>
+        <option value="Booked">Booked</option>
+        <option value="Completed">Completed</option>
+        <option value="Cancel">Cancel</option>
+    </select>
+    </form>
+    <br>
+    <table border="1" class="responstable" id="all_appointment">
+        <thead>
+        <tr>
+            <th>Patient Name</th>
+            <th>Hospital Name</th>
+            <th>Doctor Name</th>
+            <th>Appointment Date</th>
+            <th>Appointment Slot</th>
+            <th>Created By</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for appointment in appointment_list %}
+
+        <tr>
+
+            <td>
+                <a href="{% url 'doctor:patient_medical_history' appointment.id %}">
+                    {% if appointment.patient.user.first_name is None %}
+                    {{appointment.patient.first_name}}
+                    {% else %}
+                    {{appointment.patient.user.first_name}}
+                    {% endif %}
+                </a>
+
+            </td>
+            <td>{{appointment.hospital.name}}</td>
+            <td>{{appointment.doctor.user.first_name}} {{appointment.doctor.user.last_name}}</td>
+            <td>{{appointment.date|date:"D, d M, Y" }}</td>
+            <td>{{appointment.time_slot.from_time|time:"h:i a"}} to {{appointment.time_slot.to_time|time:"h:i a"}}</td>
+            <td>{{appointment.created_by.is_type}}</td>
+            <td>{{appointment.status}}</td>
+            <td>
+            {% if appointment.status == 'Booked' %}
+                <form method="post" action="{% url 'doctor:cancel_appointments' appointment.id %}"
+                      id="cancel-booking" class="cancel-booking">
+                    {% csrf_token %}
+                    <button class="btn btn-danger fa fa-trash"></button>
+                </form>
+
+            {% elif appointment.status == 'Cancel' %}
+
+            {% elif appointment.status == 'Ongoing' %}
+
+             {% else %}
+
+                 <button id="{{appointment.id}}" class="btn btn-danger fa fa-question-circle dtaa" ></button>
+
+            {% endif %}
+            </td>
+        </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="modal fade" id="show_checkup_time" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+             <h4 class="modal-title">Checkup time</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+        </div>
+        <div class="modal-body" style="color: black;">
+                  </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+{% endblock %}
+{% block js %}
+<script>
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+    }
+});
+
+$(document).ready(function() {
+    $('#all_appointment').DataTable({
+        "ordering": true,
+        "info":     false,
+        "order": [[ 6, 'asc' ]]
+    });
+
+    $('.cancel-booking').on('submit', function(event){
+
+              var r = confirm("Are You Sure!");
+              if (r == true) {
+
+              }
+              else
+              {
+                 event.preventDefault();
+               }
+});
+$('.dtaa').click(function(e){
+     var app_id = $(this).attr('id');
+
+    e.preventDefault(); // avoid to execute the actual submit of the form.
+
+    var url = "{% url 'doctor:show_checkup_timing' %}";
+    $.ajax({
+           type: 'get',
+           url: url,
+           data : { appointment_id : app_id
+                      },
+           success: function(data)
+           {
+              console.log(data);
+              $("#show_checkup_time").modal("show");
+              $("#show_checkup_time .modal-body").html('Patient checkup time is <b>'+ data.duration_hour + '</b> : <b>'+ data.duration_minute +'</b> : <b>'+data.duration_sec+'</b>');
+           },
+           error: function(data) {
+                console.log(data);
+            }
+
+         });
+
+});
+
+
+
+});
+
+</script>
+{% endblock %}

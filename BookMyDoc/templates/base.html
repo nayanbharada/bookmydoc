@@ -1,0 +1,186 @@
+{% load static %}
+<html>
+<head>
+    <title>{% block title %}{% endblock title %}</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Health medical template project">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+    <link href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/owl.carousel.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/owl.theme.default.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'plugins/OwlCarousel2-2.2.1/animate.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/main_styles.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/responsive.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/contact.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/jquery.timepicker.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/dataTables.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/table.css' %}">
+</head>
+<body>
+    {% include 'partials/header.html' %}
+<main>
+    {% block content %}
+
+    {% endblock content %}
+
+<div class="modal fade" id="modal-register">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+        </div>
+    </div>
+</div>
+</main>
+{% include 'partials/footer.html' %}
+
+
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'styles/bootstrap4/popper.js' %}"></script>
+<script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
+<script src="{% static 'plugins/OwlCarousel2-2.2.1/owl.carousel.js' %}"></script>
+<script src="{% static 'plugins/easing/easing.js' %}"></script>
+<script src="{% static 'plugins/parallax-js-master/parallax.min.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+<script src="{% static 'js/jquery-ui.js' %}"></script>
+<script src="{% static 'js/jquery.timepicker.min.js' %}"></script>
+<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<!--<script src="{% static 'js/timepicker.js' %}"></script>-->
+<!--<script src="{% static 'js/dataTables.min.js' %}"></script>-->
+
+
+<script>
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+    }
+});
+
+$(document).ready(function() {
+    $('#register-form').click(function() {
+         var url = "{% url 'user:register' %}";
+         $.ajax({
+             url:  url,
+             type : 'get',
+
+             success: function(data) {
+                $("#modal-register").modal("show");
+                $("#modal-register .modal-content").html(data.html_form);
+             },
+             error: function(data) {
+                console.log(data);
+             }
+        });
+
+    });
+
+  $("#modal-register").on("submit", ".reg_form", function (e) {
+<!--    e.preventDefault();-->
+    var form = $(this);
+    var formData = new FormData(this);
+    $.ajax({
+      url: form.attr("action"),
+      data: formData,
+      type: form.attr("method"),
+      success: function (data) {
+
+        if (data.form_is_valid) {
+          $("#modal-register").modal("hide");
+          location.reload();
+        }
+        else {
+          $("#modal-register .modal-content").html(data.html_form);
+        }
+      },
+       cache: false,
+       contentType: false,
+       processData: false
+    });
+    return false;
+  });
+
+    $('#login-form').click(function() {
+         var url = "{% url 'user:login' %}";
+         $.ajax({
+             url:  url,
+             type : 'get',
+
+             success: function(data) {
+                $("#modal-register").modal("show");
+                $("#modal-register .modal-content").html(data.html_form);
+             },
+             error: function(data) {
+                console.log(data);
+             }
+        });
+
+    });
+
+    $("#modal-register").on("submit", ".login_form", function (e) {
+<!--    e.preventDefault();-->
+    var form = $(this);
+    var formData = new FormData(this);
+    $.ajax({
+      url: form.attr("action"),
+      data: formData,
+      type: form.attr("method"),
+      success: function (data) {
+
+        if (data.form_is_valid == 'patient') {
+          $("#modal-register").modal("hide");
+          location.reload();
+        }
+        else if(data.form_is_valid == 'hospital') {
+             $("#modal-register").modal("hide");
+             var url = "{% url 'hospital:hospital_dashboard' %}";
+             document.location.href = url;
+        }
+        else if(data.form_is_valid == 'doctor') {
+            $("#modal-register").modal("hide");
+             var url = "{% url 'doctor:dashboard' %}";
+             document.location.href = url;
+        }
+        else {
+          $("#modal-register .modal-content").html(data.html_form);
+        }
+      },
+       cache: false,
+       contentType: false,
+       processData: false
+    });
+    return false;
+  });
+
+
+});
+
+</script>
+
+{% block js %}
+{% endblock js %}
+</body>
+</html>
+

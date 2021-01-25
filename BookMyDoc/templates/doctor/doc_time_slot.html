@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Doctor Time Slot Page{% endblock title %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% include 'partials/messages.html' %}
+<div class="container">
+    <div class="page-header">
+        <center><h2>
+            Doctor TimeSlot
+        </h2></center>
+    </div>
+    <div class="row">
+        <div class="col-md-8" style="color: black;">
+            <form method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <input type="submit" value="submit" class="btn btn-primary">
+                <input type="reset" value="reset" class="btn btn-success">
+            </form>
+        </div>
+    </div>
+
+<br><br>
+    <div class="row">
+        <div class="col-md-12" id="data_show">
+            <input type="hidden" id="time_slot_data" value="{{doc_time_slot}}">
+
+            <table id="doc_timeslot" class="responstable">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Doctor Name</th>
+                    <th>Day</th>
+                    <th>From Time</th>
+                    <th>To Time</th>
+                    <th>Action</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for i in doc_time_slot %}
+
+                <tr>
+                    <!--|time:"H:i p" -->
+                    <td>{{forloop.counter}}</td>
+                    <td>{{i.doc}}</td>
+                    <td>{{ i.days}}</td>
+                    <td>{{i.from_time|time:"h:i a"}}</td>
+                    <td>{{i.to_time|time:"h:i a"}}</td>
+
+                    <td><a href="{% url 'doctor:edit_doc_time_slot' i.id %}" class="btn"
+                           style="background-color: #019658; color: white;">
+                        <i class="fa fa-pencil" aria-hidden="true"></i> edit</a>
+                    </td>
+                    <td><a href="{% url 'doctor:delete_doc_time_slot' i.id %}"
+                            class="btn btn-danger" style="color: white;">
+                        <i class="fa fa-trash" aria-hidden="true"></i> delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+<script>
+$(document).ready(function() {
+    var data = $('#time_slot_data').val();
+
+    if(data == "")
+    {
+        $('#data_show').hide();
+
+    }
+    $('#doc_timeslot').DataTable({
+        "ordering": false,
+        "info":     false
+    });
+ });
+</script>
+<script type="text/javascript">
+
+ $(function() {
+	$('#id_from_time').timepicker({
+	'timeFormat': 'H:i'
+
+	});
+	$('#id_from_time').on('changeTime', function() {
+	 var first_time = $(this).val();
+        var arr = first_time.split(':');
+        var hrs = arr[0];
+        var new_hrs = parseInt(hrs)+01;
+
+        if(new_hrs>24)
+         new_hrs = new_hrs-24;
+
+         if(new_hrs < 10)
+          new_hrs  = '0'+new_hrs;
+
+        var second_time = new_hrs+':'+arr[1];
+        $('#id_to_time').val(second_time);
+});
+});
+$(function() {
+    $('#id_to_time').timepicker({
+        timeFormat: 'H:i',
+
+   });
+	$('#id_to_time').on('changeTime', function() {
+
+        var to = $('#id_to_time').val();
+        var from = $('#id_from_time').val();
+
+
+        if (from == "")
+        {
+            alert("Please enter from time first.");
+            $('#id_to_time').val("");
+
+        }
+        if(to <= from)
+        {
+            alert("you can not enter less time than from");
+            $('#id_to_time').val("");
+        }
+    });
+});
+
+
+</script>
+
+{% endblock %}

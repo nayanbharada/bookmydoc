@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+{% load static %}
+{% block content %}
+<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+        {% for carousel_image in carousel_images %}
+        {% if forloop.first %}
+        <div class="carousel-item active">
+            {% else %}
+            <div class="carousel-item">
+                {% endif %}
+                <img class="d-block w-100" src="{{carousel_image.image.url}}"
+                     alt="First slide" style="height: 70%;">
+            </div>
+            {% endfor %}
+        </div>
+    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+{% include 'partials/messages.html' %}
+
+
+<div class="info">
+    <div class="container">
+        <div class="row row-eq-height">
+
+            <!-- Info Box -->
+            <div class="col-lg-4 info_box_col">
+                <div class="info_box">
+                    <div class="info_image"><img src="{% static 'images/info_1.jpg' %}" alt=""></div>
+                    <div class="info_content">
+                        <div class="info_title">Emergency Diagnostics</div>
+                        <div class="info_text">Our emergency diagnostics services help you get the most accurate
+                            diagnosis in a minimal time.
+                        </div>
+                        <!--							<div class="button info_button"><a href="#"><span>read more</span><span>read more</span></a></div>-->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Box -->
+
+            <div class="col-lg-4 info_box_col">
+                <div class="info_box">
+                    <div class="info_image"><img src="{% static 'images/info_2.jpg' %}" alt=""></div>
+                    <div class="info_content">
+                        <div class="info_title">Qualified Specialists</div>
+                        <div class="info_text">We hire the best specialists to deliver top-notch diagnostic services
+                            for you.
+                        </div>
+                        <!--							<div class="button info_button"><a href="#"><span>read more</span><span>read more</span></a></div>-->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <br>
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-4">
+                <div class="card" style="max-width: 18rem;">
+                    <div class="card-header bg-behance content-center" style="background-color: #20c997;">
+                    </div>
+                    <div class="card-body row text-center">
+                        <i class="fa fa-users fa-3x" aria-hidden="true" style="color: black;"></i>
+                        <div class="col">
+                            <div class="info_title" style="color: black;">0{{patient_user.count}}</div>
+                            <div class="info_text" style="color: black;">Total registered patient</div>
+                        </div>
+                        <div class="vr"></div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+                <div class="card" style="max-width: 18rem;">
+                    <div class="card-header bg-behance content-center" style="background-color: #20c997;">
+                    </div>
+                    <div class="card-body row text-center">
+                        <i class="fa fa-user-md fa-3x" aria-hidden="true" style="color: black;"></i>
+                        <div class="col">
+
+
+                            <div class="info_title" style="color: black;">0{{doc_user.count}}</div>
+                            <div class="info_text" style="color: black;">Total registered doctors</div>
+                        </div>
+                        <div class="vr"></div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-4">
+                <div class="card" style="max-width: 18rem;">
+                    <div class="card-header bg-behance content-center" style="background-color: #20c997;">
+                    </div>
+                    <div class="card-body row text-center">
+                        <i class="fa fa-hospital-o fa-3x" style="color: black;"></i>
+
+                        <div class="col">
+
+
+                            <div class="info_title" style="color: black;">{{hospital_user.count}}</div>
+                            <div class="info_text" style="color: black;">Total registered hospitals</div>
+                        </div>
+                        <div class="vr"></div>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}
+{% block js %}
+
+{% endblock %}

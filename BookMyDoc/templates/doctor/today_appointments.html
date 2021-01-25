@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+{% block title %}Doctor Today Appointment Page{% endblock %}
+{% block content %}
+{% include 'partials/messages.html' %}
+<div class="container">
+    <div class="page-header">
+        <center><h2>
+            Today Appointment List
+        </h2></center>
+    </div>
+    <br>
+    <table border="1" class="responstable" id="today_appointment">
+        <thead>
+        <tr>
+            <th>Patient Name</th>
+            <th>Hospital Name</th>
+            <th>Doctor Name</th>
+            <th>Appointment Date</th>
+            <th>Appointment Slot</th>
+            <th>Created By</th>
+            <th>Action</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+
+        {% for appointment in today_appointment_list %}
+         <tbody>
+        <tr>
+             <td>
+                 <a href="{% url 'doctor:patient_medical_history' appointment.id %}">
+                {% if appointment.patient.user.first_name is None %}
+                        {{appointment.patient.first_name}}
+                {% else %}
+                    {{appointment.patient.user.first_name}}
+                {% endif %}
+                  </a>
+                </td>
+            <td>{{appointment.hospital.name}}</td>
+            <td>{{appointment.doctor.user.first_name}} {{appointment.doctor.user.last_name}}</td>
+            <td>{{appointment.date|date:"D, d M, Y" }}</td>
+            <td>{{appointment.time_slot.from_time|time:"h:i a"}} to {{appointment.time_slot.to_time|time:"h:i a"}}</td>
+            <td>{{appointment.created_by.is_type}}</td>
+            <td>
+                <button id="{{appointment.id}}" class="btn btn-success fa fa-info-circle"></button>
+            </td>
+            <td>
+
+                <form method="post" action="{% url 'doctor:cancel_today_appointments' appointment.id %}"
+                      id="cancel-booking" class="cancel-booking">
+                    {% csrf_token %}
+                    <button class="btn btn-danger fa fa-trash"></button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+    <input type="hidden" name="appointment_id" id="appointment_id">
+</div>
+
+<div class="modal fade" id="modelWindow" role="dialog">
+    <div class="modal-dialog modal-sm vertical-align-center">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Checkup-Timing</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+<!--            <div class="modal-body">-->
+<!--                <h1 style="background-color: black;">-->
+<!--                    <time>00:00:00</time>-->
+<!--                </h1>-->
+<!--            </div>-->
+            <div class="modal-footer">
+                <button type="button" id="check-in" class="btn btn-info">Check-in</button>
+                <button type="button" id="check-out" class="btn btn-info">Check-out</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+    }
+});
+$(document).ready(function() {
+    $('#today_appointment').DataTable({
+        "paging":   false,
+        "ordering": false,
+        "info":     false
+    });
+$('.cancel-booking').on('submit', function(event){
+
+              var r = confirm("Are You Sure!");
+              if (r == true) {
+
+              }
+              else
+              {
+                 event.preventDefault();
+               }
+});
+
+
+$('.btn-success').click(function() {
+    var slot_id = $(this).attr('id');
+
+    $('#appointment_id').val(slot_id);
+        var url = "{% url 'doctor:check_status' %}";
+         $.ajax({
+             url:  url,
+             type : "get",
+             data : { appointment_id : $('#appointment_id').val()
+                      },
+
+            success: function(response) {
+                    console.log(response);
+                  if(response.message == 'false') {
+                    console.log('Message is False');
+                        $('#check-in').hide();
+                        $('#check-out').show();
+                  }
+                  else{
+                        console.log('Message is True');
+                        $('#check-in').show();
+                        $('#check-out').hide();
+                  }
+
+
+            },
+            error: function(response) {
+                console.log(response);
+            }
+        });
+         $('#check-in').show();
+
+
+        $('#modelWindow').modal('show');
+    });
+
+
+$('#check-in').click(function() {
+                $('#check-out').show();
+
+                $('#check-in').hide();
+                 var url = "{% url 'doctor:change_appointment_status' %}";
+        $.ajax({
+             url:  url,
+             type : "POST",
+             data : { appointment_id : $('#appointment_id').val()
+                      },
+
+            success: function(response) {
+                 console.log(response);
+            },
+            error: function(response) {
+                console.log(response);
+            }
+        });
+
+});
+
+$('#check-out').click(function() {
+        var url = "{% url 'doctor:change_appointment_status' %}";
+        $.ajax({
+             url:  url,
+             type : "GET",
+             data : { appointment_id : $('#appointment_id').val(),
+                      },
+
+            success: function(response) {
+                        location.reload();
+                        console.log(response);
+            },
+            error: function(response) {
+                console.log(response.message);
+            }
+        });
+
+
+});
+});
+
+</script>
+
+{% endblock %}

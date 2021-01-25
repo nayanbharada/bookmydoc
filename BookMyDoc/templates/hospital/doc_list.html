@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}All doctor list page{% endblock %}
+{% block content %}
+{% include 'partials/messages.html' %}
+
+<div class="container">
+    <div class="page-header">
+        <center><h2>
+            Doctor List
+        </h2></center>
+    </div>
+
+    <table class="responstable">
+        <tr>
+            <th>Name</th>
+            <th>Specialization</th>
+            <th>Council</th>
+            <th>Action</th>
+        </tr>
+        {% for all_doc in all_doc %}
+
+        <tr>
+            <td>Dr. {{all_doc.user.first_name|title}} {{all_doc.user.last_name|title}}</td>
+            <td>{{all_doc.specialization}}</td>
+            <td>{{all_doc.council}}</td>
+            <td><a href="{%url 'hospital:delete_doc' all_doc.id%}" class="btn btn-danger">Delete</a></td>
+        </tr>
+        {% endfor %}
+
+    </table>
+</div>
+
+
+{% endblock %}
+{% block js %}
+{% endblock %}

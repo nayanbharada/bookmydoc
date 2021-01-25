@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Doctor Other Appointments Page{% endblock %}
+{% block content %}
+{% include 'partials/messages.html' %}
+<div class="container">
+    <div class="page-header">
+        <center><h2>
+             Appointment List
+        </h2></center>
+    </div>
+    <br>
+    <table border="1" class="responstable" id="other_appointment">
+        <thead>
+        <tr>
+            <th>Patient Name</th>
+            <th>Hospital Name</th>
+            <th>Doctor Name</th>
+            <th>Appointment Date</th>
+            <th>Appointment Slot</th>
+            <th>Created By</th>
+            <th>Status</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for appointment in other_appointment_list %}
+
+        <tr>
+
+            <td>
+                <a href="{% url 'doctor:patient_medical_history' appointment.id %}">
+                    {% if appointment.patient.user.first_name is None %}
+                    {{appointment.patient.first_name}}
+                    {% else %}
+                    {{appointment.patient.user.first_name}}
+                    {% endif %}
+                </a>
+
+            </td>
+            <td>{{appointment.hospital.name}}</td>
+            <td>{{appointment.doctor.user.first_name}} {{appointment.doctor.user.last_name}}</td>
+            <td>{{appointment.date|date:"D, d M, Y" }}</td>
+            <td>{{appointment.time_slot.from_time|time:"h:i a"}} to {{appointment.time_slot.to_time|time:"h:i a"}}</td>
+            <td>{{appointment.created_by.is_type}}</td>
+            <td>{{appointment.status}}</td>
+        </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
+{% block js %}
+<script>
+$(document).ready(function() {
+    $('#other_appointment').DataTable({
+        "ordering": false,
+        "info":     false
+    });
+
+    $('.cancel-booking').on('submit', function(event){
+
+              var r = confirm("Are You Sure!");
+              if (r == true) {
+
+              }
+              else
+              {
+                 event.preventDefault();
+               }
+});
+});
+
+</script>
+{% endblock %}

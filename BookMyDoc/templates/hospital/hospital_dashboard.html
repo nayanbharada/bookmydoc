@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% block title %}Doctor Dashboard Page{% endblock %}
+{% block content %}
+{% include 'partials/messages.html' %}
+<div class="container">
+    <div class="page-header">
+        <center><h2>
+            Dashboard
+        </h2></center>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <a href="{% url 'hospital:hospital_profile' request.user.id %}">
+            <div class="card text-white mb-3" style="max-width: 16rem; background: #28a745eb;">
+                <!--  <div class="card-header">Appointments</div>-->
+                <div class="card-body">
+                    <h4 class="card-title">Hospital Profile</h4>
+                    <div class="rotate">
+                        <i class="fa fa-user fa-3x"></i>
+                    </div>
+
+                    <p class="card-text-right"></p>
+                </div>
+            </div>
+                </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'hospital:doc_list' %}">
+            <div class="card text-white mb-3" style="max-width: 16rem; background: #17a2b8;">
+                <!--  <div class="card-header">Appointments</div>-->
+                <div class="card-body">
+                    <h4 class="card-title">All Doctors</h4>
+                    <div class="rotate">
+                        <i class="fa fa-list-alt fa-3x"></i>
+                    </div>
+
+                    <p class="card-text-right"></p>
+                </div>
+            </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'hospital:add_doctor' %}">
+                <div class="card text-white mb-3" style="max-width: 16rem; background: #ff2489e0;">
+                    <!--  <div class="card-header">Appointments</div>-->
+                    <div class="card-body">
+                        <h4 class="card-title">Add Doctors</h4>
+                        <div class="rotate">
+                            <i class="fa fa-user-md fa-3x"></i>
+                        </div>
+
+                        <p class="card-text-right"></p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <a id="hospital_image">
+                <div class="card text-white mb-3" style="max-width: 16rem; background: #ff5e00;">
+                    <!--  <div class="card-header">Appointments</div>-->
+                    <div class="card-body">
+                        <h4 class="card-title">Add Images</h4>
+                        <div class="rotate">
+                            <i class="fa fa-picture-o fa-3x"></i>
+                        </div>
+
+                        <p class="card-text-right"></p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'doctor:all_hospital' %}">
+                <div class="card text-white mb-3" style="max-width: 16rem; background: #8500ffc7;">
+                    <!--  <div class="card-header">Appointments</div>-->
+                    <div class="card-body">
+                        <h4 class="card-title">All Hospital</h4>
+                        <div class="rotate">
+                            <i class="fa fa-hospital-o fa-3x"></i>
+                        </div>
+
+                        <p class="card-text-right"></p>
+                    </div>
+                </div>
+            </a>
+        </div>
+                <div class="col-md-4">
+            <a href="{% url 'hospital:all_doctor_list' %}">
+                <div class="card text-white mb-3" style="max-width: 16rem; background: #ff8d00d6;">
+                    <!--  <div class="card-header">Appointments</div>-->
+                    <div class="card-body">
+                        <h4 class="card-title">Doctor List</h4>
+                        <div class="rotate">
+                            <i class="fa fa-th-list fa-3x"></i>
+                            <div align="right">
+                                <span class="badge badge-danger ml-3" style="font-size: 17px;">{{other_appointment_list.count}}</span>
+                            </div>
+                        </div>
+
+                        <p class="card-text-right"></p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
+    </div>
+
+
+</div>
+</div>
+<div class="modal fade" id="modal-image">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+      </div>
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}
+{% block js %}
+<script>
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+    }
+});
+
+$(document).ready(function() {
+    $('#hospital_image').click(function() {
+         var url = "{% url 'hospital:upload_hospital_images' %}";
+         $.ajax({
+             url:  url,
+             type : 'get',
+
+             success: function(data) {
+                $("#modal-image").modal("show");
+
+                $("#modal-image .modal-content").html(data.html_form);
+             },
+             error: function(data) {
+                console.log(data);
+             }
+        });
+
+    });
+
+  $("#modal-image").on("submit", ".hospital_image", function (e) {
+<!--    e.preventDefault();-->
+    var form = $(this);
+    var formData = new FormData(this);
+    $.ajax({
+      url: form.attr("action"),
+      data: formData,
+      type: form.attr("method"),
+      success: function (data) {
+
+        if (data.form_is_valid) {
+          $("#modal-image").modal("hide");
+          location.reload();
+        }
+        else {
+          $("#modal-image .modal-content").html(data.html_form);
+        }
+      },
+       cache: false,
+       contentType: false,
+       processData: false
+    });
+    return false;
+  });
+
+});
+</script>
+{% endblock %}

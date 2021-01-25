@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Doctor Qualification Page{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% include 'partials/messages.html' %}
+<div class="container">
+    <div class="page-header">
+        <center><h2>
+           Edit Doctor Qualification
+        </h2></center>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <form method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <input type="submit" class="btn btn-primary" value="submit">
+                <input type="reset" class="btn btn-success" value="clear">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

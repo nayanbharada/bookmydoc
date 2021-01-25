@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Contact Page{% endblock %}
+{% load widget_tweaks %}
+{% block content %}
+{% include 'partials/messages.html' %}
+<div class="contact">
+            <center><h2>Contact</h2></center>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 contact_col">
+                <div class="contact_form">
+                    <div class="contact_title">Get in touch</div>
+                    <div class="contact_form_container">
+                        <form action="{% url 'user:contact' %}" id="contact_form" class="contact_form" method="post">
+                            {% csrf_token %}
+                            {% if form.errors %}
+                            {% for field in form %}
+                            {% for error in field.errors %}
+                            <div class="alert alert-danger">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                            {% endfor %}
+                            {% endfor %}
+                            {% for error in form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                            {% endfor %}
+                            {% endif %}
+                          {% for field in form.visible_fields %}
+                             <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                             {{ field|add_class:'contact_input' }}
+                           {% endfor %}
+                            <button class="contact_button" id="contact_button">send message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 contact_col">
+                <div class="contact_info_list">
+                    <div class="contact_info_title">Contact Info</div>
+                <ul>
+                    <li><span>Address: </span>Mitlton Str. 26-27 Gibraltar</li>
+                    <li><span>Email: </span>bookmydoc@gmail.com</li>
+                    <li><span>Phone: </span>+91 8758162943</li>
+                </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

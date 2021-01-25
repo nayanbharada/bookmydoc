@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% block title %}All Hospital/Clinic {% endblock %}
+{% block content %}
+{% load static %}
+<style>
+
+body{
+  background: #f2f2f2;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.search {
+  width: 50%;
+  position: relative;
+  display: flex;
+}
+
+.searchTerm {
+  width: 50%;
+  border: 2px solid #black;
+  border-right: none;
+  padding: 5px;
+  height: 40px;
+  border-radius: 5px 0 0 5px;
+  outline: none;
+  color: black;
+}
+
+.searchTerm:focus{
+  color: black;
+}
+
+</style>
+{% include 'partials/messages.html' %}
+<div class="container">
+    <div class="page-header">
+        <center><h2>
+            All Hospitals
+        </h2></center>
+    </div>
+
+    <input type="text" class="searchTerm" id="SearchTextField" placeholder="search here">
+    <table id="all_hospital">
+        <thead>
+        <tr>
+            <th style="border-bottom: 0px;"></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for all_hospital_clinic in all_hospital %}
+        <tr>
+            <td>
+                <div class="col-md-12">
+                    <div class="card mb-4" style="width: 680px; border-color: black;">
+                        <div class="row no-gutters">
+                            <div class="col-md-4">
+                                {% if all_hospital_clinic.user.profile_image %}
+                                <img src="{{ all_hospital_clinic.user.profile_image.url }}" class="card-img"
+                                     alt="no display found">
+                                {% else %}
+                                <img src="{% static 'images/defaultimage.png' %}" class="card-img"
+                                     alt="no display found">
+                                {% endif %}
+                            </div>
+                            <div class="col-md-8" style="color: black;">
+                                <div class="card-body">
+                                    <h4 class="card-title"><font color="black">
+                                        <a href="{% url 'doctor:doctor_list_view' all_hospital_clinic.id %}">
+                                            {{ all_hospital_clinic.name|title}}
+                                        </a></font></h4>
+                                    <h5 class="card-text">{{ all_hospital_clinic.is_type }}</h5>
+                                    <h5 class="card-text">{{ all_hospital_clinic.doctor_pro.count }} Doctors</h5>
+                                    <h5 class="card-text">{{ all_hospital_clinic.website }}</h5>
+                                    <h5 class="card-text">{{ all_hospital_clinic.no_of_opd }} OPD</h5>
+                                    <h5 class="card-text"><i class="fa fa-map-marker" aria-hidden="true"></i>
+                                        {{ all_hospital_clinic.address }}</h5>
+
+                                    <!--                                    <h5 class="card-text"><i class="fa fa-envelope" aria-hidden="true"></i>-->
+                                    <!--                                        {{ all_hospital_clinic.user.email }}</h5>-->
+                                    <!--        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>-->
+<!--                                    <h5 class="card-text"><i class="fa fa-phone" aria-hidden="true"></i>-->
+<!--                                        {{ all_hospital_clinic.user.mobile_number }}-->
+<!--                                    </h5>-->
+
+                                    <div class="text-right">
+                                        <div class="card-footer">
+                                            <a class="btn btn-sm" data-toggle="modal" data-target="#call_modal{{forloop.counter0}}"
+                                               style="background-color: #20c997; color: black; border-color: black;">
+                                                <i class="fa fa-phone" aria-hidden="true"></i> Call Now
+                                            </a>
+
+                                        </div>
+
+
+                                    </div>
+                                      <div id="call_modal{{forloop.counter0}}" class="modal fade"
+                                         role="dialog">
+                                        <div class="modal-dialog" style="text-align:center;">
+
+                                            <div class="modal-content">
+                                                <br><br><br>
+                                                <span style="font-weight: 700; font-size: 24px; color: #01a400; margin-bottom: 20px;">
+                                            {{ all_hospital_clinic.user.mobile_number }}</span>
+
+                                                <div class="modal-body">
+                                                    <p><span>By calling this number, you agree to the Terms & Conditions.</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </td>
+        </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+</div>
+
+
+{% endblock %}
+{% block js %}
+<script>
+$(document).ready(function () {
+ var all_hos = $('#all_hospital').DataTable({
+        "ordering": false,
+        "info":     false,
+        "lengthChange": false,
+         "dom": "tipr"
+
+    });
+$('#SearchTextField').keyup(function(){
+      all_hos.search($(this).val()).draw() ;
+});
+});
+</script>
+
+{% endblock %}

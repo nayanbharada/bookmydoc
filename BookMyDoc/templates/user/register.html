@@ -1,0 +1,55 @@
+{% load crispy_forms_tags %}
+
+
+<form method="post" action="{% url 'user:register' %}" class="reg_form">
+
+    {% csrf_token %}
+    <div class="modal-header">
+        <h4 class="modal-title">Register </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        {% if form.errors %}
+        <ul style="color: red;">
+            {{ form.non_field_errors }}
+            <li><font color="red">{{ form.error }}</font></li>
+        </ul>
+        {% endif %}
+        <div class="row">
+            <div class="col-md-10">
+                {{ form.first_name|as_crispy_field }}
+            </div>
+            <div class="col-md-10">
+                {{ form.last_name|as_crispy_field }}
+            </div>
+            <div class="col-md-10">
+                {{ form.username|as_crispy_field }}
+            </div>
+            <div class="col-md-10">
+                {{ form.email|as_crispy_field }}
+            </div>
+            <div class="col-md-10">
+                {{ form.password|as_crispy_field }}
+            </div>
+            <div class="col-md-10">
+                {{ form.mobile_number|as_crispy_field }}
+            </div>
+        </div>
+        <!--                    {{ form|crispy }}-->
+        <input type="submit" value="submit" class="btn btn-primary">
+        <input type="reset" value="clear" class="btn btn-success">
+    </div>
+    <div class="options text-center text-md-left mt-2">
+        <p> If You Want To Register Hospital/Clinic? <a href="{% url 'hospital:hospital_request' %}">Click Here</a></p>
+    </div>
+<!--    <div class="options text-left">-->
+<!--        <p class="pt-1">Already have an account? <a href="{% url 'user:login' %}" class="blue-text">Log In</a></p>-->
+<!--    </div>-->
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+    </div>
+</form>
+
+
